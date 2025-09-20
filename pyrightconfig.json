@@ -1,0 +1,6 @@
+{
+  "typeCheckingMode": "standard",
+  "reportMissingImports": "error",
+  "reportUnusedImport": "warning",
+  "reportUnusedVariable": "warning"
+}
