@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from typing import Optional
+from typing import Optional, Dict, Any
 from datetime import datetime
 
 class HealthResponse(BaseModel):
@@ -15,6 +15,38 @@ class ErrorResponse(BaseModel):
     status_code: int = Field(..., description="HTTP status code")
     timestamp: datetime = Field(..., description="Error timestamp")
     details: Optional[dict] = Field(None, description="Additional error details")
+
+# OAuth Models
+class SpotifyToken(BaseModel):
+    """Spotify OAuth token model"""
+    access_token: str = Field(..., description="Spotify access token")
+    token_type: str = Field(default="Bearer", description="Token type")
+    expires_in: int = Field(..., description="Token expiration time in seconds")
+    refresh_token: Optional[str] = Field(None, description="Refresh token")
+    scope: Optional[str] = Field(None, description="Granted scopes")
+    expires_at: Optional[datetime] = Field(None, description="Token expiration timestamp")
+
+class SpotifyUser(BaseModel):
+    """Spotify user profile model"""
+    id: str = Field(..., description="Spotify user ID")
+    display_name: Optional[str] = Field(None, description="User's display name")
+    email: Optional[str] = Field(None, description="User's email")
+    country: Optional[str] = Field(None, description="User's country")
+    followers: Optional[Dict[str, Any]] = Field(None, description="User's followers info")
+    images: Optional[list] = Field(None, description="User's profile images")
+    product: Optional[str] = Field(None, description="User's subscription type")
+
+class AuthResponse(BaseModel):
+    """Authentication response model"""
+    success: bool = Field(..., description="Authentication success status")
+    message: str = Field(..., description="Response message")
+    user: Optional[SpotifyUser] = Field(None, description="User profile data")
+    access_token: Optional[str] = Field(None, description="Access token (if needed)")
+
+class AuthUrlResponse(BaseModel):
+    """Authentication URL response model"""
+    auth_url: str = Field(..., description="Spotify authorization URL")
+    state: str = Field(..., description="OAuth state parameter for security")
 
 class PlaylistBase(BaseModel):
     """Base playlist model"""
